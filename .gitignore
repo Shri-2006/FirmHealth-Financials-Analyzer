@@ -15,4 +15,7 @@ venv/
 
 #General
 .DS_Store
-*.log
+*.log.classpath
+.project
+.settings/
+.mvn/
