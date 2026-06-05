@@ -19,3 +19,8 @@ venv/
 .project
 .settings/
 .mvn/
+
+#compiled code that is machine specific
+math_engine/ratios
+math_engine/ratios.so
+math_engine/*.o
