@@ -33,19 +33,19 @@ public class AnalysisService{
     double sales=inputs.getOrDefault("sales",0.0);
     
     // currentRatio
-    ratios.put("currentRatio", currentLiabilities == 0.0 ? -1.0 : currentAssets / currentLiabilities);
+    ratios.put("currentRatio", currentLiabilities == 0.0 ? null : currentAssets / currentLiabilities);
     
     //debttoequity
-    ratios.put("debtToEquity",totalEquity==0.0 ?-1.0 : totalDebt/totalEquity);
+    ratios.put("debtToEquity",totalEquity==0.0 ?null : totalDebt/totalEquity);
 
     //profit margin
-    ratios.put("profitMargin",revenue==0.0 ? -1.0 : netIncome/revenue);
+    ratios.put("profitMargin",revenue==0.0 ? null : netIncome/revenue);
 
     //interest coverage
-    ratios.put("interestCoverage",interestExpense==0.0 ? -1.0: ebit/interestExpense);
+    ratios.put("interestCoverage",interestExpense==0.0 ? null: ebit/interestExpense);
 
     //altmanz
-    ratios.put("altmanZ", totalAssets==0.0 ? -1.0 : (((1.2*(workingCapital)/(totalAssets))+ ((1.4)*(retainedEarnings)/(totalAssets))+(3.3*(ebit)/(totalAssets))+((0.6)*(marketCapEquity/totalLiabilities))+(sales/(totalAssets)))));
+    ratios.put("altmanZ", totalAssets==0.0 ? null : (((1.2*(workingCapital)/(totalAssets))+ ((1.4)*(retainedEarnings)/(totalAssets))+(3.3*(ebit)/(totalAssets))+((0.6)*(marketCapEquity/totalLiabilities))+(sales/(totalAssets)))));
     
     return ratios;
 }

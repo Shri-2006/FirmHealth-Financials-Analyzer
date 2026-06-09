@@ -7,6 +7,8 @@ import java.io.OutputStreamWriter;
 import java.util.Map;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
+import com.fasterxml.jackson.core.type.TypeReference;
+import java.util.ArrayList;
 
 @Component
 public class CBridge {
@@ -32,9 +34,20 @@ public class CBridge {
             String output=reader.readLine();
 
             process.waitFor();//wait for C to actually exit completely to prevent potential memory buildup and erros
-
-            Map<String,Double> result=mapper.readValue(output,Map.class);
+            
+            Map<String,Double> result=mapper.readValue(output,new TypeReference<Map<String,Double>>() {});
+            ArrayList<String> nanKeys = new ArrayList<String>();
+            for(Map.Entry<String,Double> entry : result.entrySet()){
+                if(entry.getValue()==null || Double.isNaN(entry.getValue())){
+                    nanKeys.add(entry.getKey());
+                    System.err.printf("ratio has a NaN value %s\n",entry.getKey());
+                }
+            }
+            for(int i=0;i<nanKeys.size();i++){
+                result.put(nanKeys.get(i),null);
+            }
             return result;
+            
  
         }
         catch(Exception e){

@@ -77,7 +77,7 @@ int main(){
     double currentRatio=computeCurrentRatio(&inputs);
     double debtToEquity=computeDebtToEquity(&inputs);
     double profitMargin=computeProfitMargin(&inputs);
-    double interestExpense=computeInterestCoverage(&inputs);
+    double interestCoverage=computeInterestCoverage(&inputs);
     double altmanZ=computeAltmanZ(&inputs);
 
     cJSON *output=cJSON_CreateObject();

@@ -1,10 +1,11 @@
 #ifndef RATIOS_H
 #define RATIOS_H
 
+#include <math.h>
 
 
 
-#define RATIO_ERROR -1.0
+#define RATIO_ERROR NAN
 
 typedef struct {
     double currentAssets;
