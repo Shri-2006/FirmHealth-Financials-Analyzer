@@ -28,9 +28,27 @@ def fetch_edgar_metrics(ticker):
             return None
         cik_padded=str(cik).zfill(10)
         url=f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik_padded}.json"
-        facts_data=requests.get(url).json
+        facts_data=requests.get(url).json()
+        us_gaap=facts_data['facts']['us-gaap']
         metrics={}
-        for(int i=0;i<CONCEPT_MAP.items();i++):
-            
+        for metric, concepts in CONCEPT_MAP.items():
+            if not concepts:
+                continue
+            for concept in concepts:
+                if(concept in us_gaap):
+                    all_entries=us_gaap[concept]['units']['USD']
+                    filtered=[e for e in all_entries if e['form']=='10-K']
+                    metrics[metric]=max(filtered,key=lambda x: x['end'])['val']
+                    break
+            else:
+                metrics[metric]=None        
+                    
+        if(metrics['currentAssets'] is None or metrics['currentLiabilities'] is None):
+            metrics['workingCapital']=None
+        else:
+            metrics['workingCapital']=metrics['currentAssets']-metrics['currentLiabilities']
+        metrics['sales']=metrics['revenue']
+        metrics['marketCapEquity']=None
+        return metrics
     except:
         return None
