@@ -1,5 +1,5 @@
 import requests
-
+import yfinance as yf
 CONCEPT_MAP={
     "revenue": ["Revenues","RevenueFromContractWithCustomerExcludingAssessedTax"],
     "netIncome":["NetIncomeLoss"],
@@ -49,6 +49,43 @@ def fetch_edgar_metrics(ticker):
             metrics['workingCapital']=metrics['currentAssets']-metrics['currentLiabilities']
         metrics['sales']=metrics['revenue']
         metrics['marketCapEquity']=None
+        return metrics
+    except:
+        return None
+
+def fetch_yahoo_metrics(ticker):
+    
+    info=yf.Ticker(ticker).info
+    metrics={}
+    try:
+        metrics['revenue']=info.get('totalRevenue')
+        metrics['netIncome']=info.get('netIncomeToCommon')
+        metrics['totalAssets']=info.get('totalAssets')
+        metrics['totalLiabilities']=info.get('totalDebt')
+        bv = info.get('bookValue')
+        shares = info.get('sharesOutstanding')
+        metrics['totalEquity'] = bv * shares if (bv is not None and shares is not None) else None
+        metrics['currentAssets']=info.get('currentAssets')
+        metrics['currentLiabilities']=info.get('currentLiabilities')
+        metrics['totalDebt']=info.get('totalDebt')
+        metrics['retainedEarnings']=info.get('retainedEarnings')
+        metrics['ebit']=info.get('ebit')
+        metrics['interestExpense']=info.get('interestExpense')
+        metrics['marketCapEquity']=info.get('marketCap')    
+        if(metrics['currentAssets'] is None or metrics['currentLiabilities'] is None):
+            metrics['workingCapital']=None
+        else:
+            metrics['workingCapital']=metrics['currentAssets']-metrics['currentLiabilities']
+        metrics['sales']=metrics['revenue']
+        return metrics
+    except:
+        return None
+
+def fetch_metrics(ticker):
+    try:
+        metrics=fetch_edgar_metrics(ticker)
+        if metrics is None:
+            metrics=fetch_yahoo_metrics(ticker)
         return metrics
     except:
         return None
