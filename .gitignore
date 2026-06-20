@@ -24,3 +24,6 @@ venv/
 math_engine/ratios
 math_engine/ratios.so
 math_engine/*.o
+
+#model should not be commited
+*.pkl

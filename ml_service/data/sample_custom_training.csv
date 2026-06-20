@@ -1,0 +1,6 @@
+company_name,status_label,currentRatio,profitMargin,altmanZ,debtToEquity,interestCoverage
+EXAMPLE_HEALTHY,alive,2.1,0.15,3.2,0.4,5.2
+EXAMPLE_DISTRESSED,failed,0.6,-0.12,1.1,3.2,0.8
+EXAMPLE_HEALTHY_2,alive,1.8,0.09,2.9,0.6,4.1
+EXAMPLE_DISTRESSED_2,failed,0.4,-0.23,0.7,5.1,0.3
+EXAMPLE_BORDERLINE,alive,1.1,0.02,1.9,1.8,1.5
