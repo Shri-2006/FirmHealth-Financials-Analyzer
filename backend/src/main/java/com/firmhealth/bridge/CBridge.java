@@ -1,5 +1,5 @@
 package com.firmhealth.bridge;
-
+import org.springframework.beans.factory.annotation.Value;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
@@ -12,7 +12,8 @@ import java.util.ArrayList;
 
 @Component
 public class CBridge {
-    private static final String C_EXECUTABLE = "./math_engine/ratios";
+    @Value("${firmhealth.c-engine.path}")
+    private String C_EXECUTABLE;
 
     public Map<String, Double> computeRatios(Map<String, Double> financialInputs){
         try{
