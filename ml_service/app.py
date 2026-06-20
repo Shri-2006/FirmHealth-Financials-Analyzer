@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from ingestor import fetch_metrics
 from sanitizer import sanitize_csv
 import subprocess
+from model import predict_distress
 app = Flask(__name__)
 
 @app.route('/health',methods=['GET'])
@@ -15,7 +16,8 @@ def edgar_ingest():
     metrics=fetch_metrics(ticker)
     if metrics is None:
         return jsonify({"error":"Failed to fetch metrics"}),500
-    return jsonify(metrics)
+    results=predict_distress(metrics)
+    return jsonify({"metrics": metrics, **results})
     
 
 @app.route('/ingest/csv',methods=['POST'])
@@ -24,8 +26,8 @@ def csv_ingest():
     metrics= sanitize_csv(file)
     if metrics is None:
         return jsonify({"error":"Failed to fetch csv metrics"}),500
-    return jsonify(metrics)
-
+    results=predict_distress(metrics)
+    return jsonify({"metrics": metrics, **results})
 @app.route('/train',methods=['POST'])
 def train_model():
     try:
