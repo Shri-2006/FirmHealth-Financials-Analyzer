@@ -3,6 +3,7 @@ from ingestor import fetch_metrics
 from sanitizer import sanitize_csv
 import subprocess
 from model import predict_distress
+from fallback_trends import analyze_all_trends, generate_report
 app = Flask(__name__)
 
 @app.route('/health',methods=['GET'])
@@ -37,7 +38,22 @@ def train_model():
         return jsonify({"status":"training complete"})
     except:
         return jsonify({"error":"Failed to train on sample csv metrics"}),500
+
+
+@app.route('/trends',methods=["POST"])
+def analysis_fallback():
+    try:
+        data=request.get_json()
+        ratios=data.get('ratios')
+        ticker=data.get('ticker')
+        trends=analyze_all_trends(ratios)
+        res=generate_report(ticker,trends)
+        return jsonify(res)
+    except:
+        return jsonify({"error":"Failed to analyze metrics"}),500
     
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
+
+
