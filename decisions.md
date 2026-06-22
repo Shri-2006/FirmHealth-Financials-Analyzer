@@ -99,5 +99,37 @@
 **Tradeoff:** validation is now implicit rather than explicit, so if it gets complex in later updates, its harder to find and justify.
 
 ---
+## Phase 4 — R Analytics Service
+
+**Decision: R over Python for trend analysis**
+R was chosen for statistical trend analysis because linear regression, 
+standard deviation, and model summaries are first-class citizens in base R. 
+`lm()` and `summary()` produce everything needed in two lines. 
+Python can replicate this with scipy but requires more assembly. 
+R is the natural fit; Python is the fallback.
+
+**Decision: Plumber over other R web frameworks**
+Plumber is the standard HTTP API framework for R, maintained by Posit 
+(formerly RStudio). It uses comment-based annotations (`#*`) to expose 
+functions as routes. No meaningful alternatives exist in the R ecosystem.
+
+**Decision: Port 8001 for R service**
+Java on 8080, Python on 5000, R on 8001. Sequential and memorable.
+
+**Decision: Python fallback replicates R output contract exactly**
+`fallback_trends.py` produces identical JSON structure to R's response. 
+Java cannot tell which service responded. This is intentional — 
+the fallback is silent to the end user.
+
+**Decision: R logs its own service errors only**
+Java handles all centralized business logic logging. R uses `cat()` 
+to log its own internal errors only. This keeps logging concerns 
+separated by service boundary.
+
+**Decision: Version-pinned R packages via remotes**
+`remotes::install_version()` pins exact package versions in the R 
+Dockerfile, matching the philosophy of `requirements.txt` in Python. 
+Reproducible builds across environments.
+---
 
 *This document is updated at the end of every phase.*
