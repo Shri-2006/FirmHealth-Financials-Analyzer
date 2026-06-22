@@ -30,8 +30,8 @@ def analyze_all_trends(ratios_dict):
 
 def generate_report(ticker,trends):
     directions = [t["direction"] for t in trends.values()]
-    overallDirections=max(directions,key=directions.count)
+    overallDirection=max(directions,key=directions.count)
     riskFlag=any(t["direction"] == "declining" and t["volatile"] for t in trends.values())
-    summary={"overallDirections":overallDirections,"riskFlag":riskFlag}
+    summary={"overallDirection":overallDirection,"riskFlag":riskFlag}
     res={"ticker":ticker,"trends":trends,"summary":summary}
     return res
