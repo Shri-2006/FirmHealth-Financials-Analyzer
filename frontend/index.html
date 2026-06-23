@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FirmHealth — Financial Analyzer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <span class="logo">FirmHealth</span>
+    <span class="tagline">Enterprise Credit Risk Intelligence</span>
+  </header>
+
+  <main class="container">
+
+    <!-- INPUT SECTION -->
+    <section id="input-section">
+
+      <h2 class="section-title">New Analysis</h2>
+
+      <!-- Error display — announced immediately by screen readers via role="alert" -->
+      <div id="error-box" class="error-box hidden" role="alert"></div>
+
+      <!-- STEP 1: EVALUATOR -->
+      <div class="analysis-step">
+        <h3 class="step-title">
+          <span class="step-number">1</span> Your Company Profile
+        </h3>
+        <p class="step-note">
+          Provide your own financials so the credit recommendation is
+          calibrated to your position, not just the subject's.
+        </p>
+
+        <div class="tab-bar" id="eval-tab-bar">
+          <button class="tab-btn active" id="tab-eval-ticker" type="button">
+            Public Firm (Ticker)
+          </button>
+          <button class="tab-btn" id="tab-eval-csv" type="button">
+            Private Firm (CSV)
+          </button>
+        </div>
+
+        <div class="tab-panel" id="panel-eval-ticker">
+          <label for="eval-ticker-input" class="field-label">
+            Your Ticker Symbol
+          </label>
+          <input
+            type="text"
+            id="eval-ticker-input"
+            class="text-input"
+            placeholder="e.g. MSFT"
+            maxlength="5"
+            autocomplete="off"
+            spellcheck="false"
+          />
+        </div>
+
+        <div class="tab-panel hidden" id="panel-eval-csv">
+          <label for="eval-csv-input" class="field-label">
+            Your Financial Statement (CSV)
+          </label>
+          <input
+            type="file"
+            id="eval-csv-input"
+            accept=".csv"
+          />
+        </div>
+
+        <!-- Policy fields — not extractable from financials -->
+        <div class="policy-fields">
+          <label for="eval-terms" class="field-label">
+            Payment Terms You Offer
+          </label>
+          <select id="eval-terms" class="select-input">
+            <option value="net30">Net 30</option>
+            <option value="net60">Net 60</option>
+            <option value="net90">Net 90</option>
+          </select>
+
+          <label for="eval-threshold" class="field-label">
+            Maximum Credit Threshold (USD)
+          </label>
+          <input
+            type="number"
+            id="eval-threshold"
+            class="text-input"
+            placeholder="e.g. 500000"
+            min="0"
+          />
+        </div>
+      </div>
+
+      <!-- STEP 2: SUBJECT -->
+      <div class="analysis-step">
+        <h3 class="step-title">
+          <span class="step-number">2</span> Company You Are Evaluating
+        </h3>
+        <p class="step-note">
+          Enter the financials of the firm you are considering extending
+          credit to.
+        </p>
+
+        <div class="tab-bar" id="subject-tab-bar">
+          <button class="tab-btn active" id="tab-subject-ticker" type="button">
+            Public Firm (Ticker)
+          </button>
+          <button class="tab-btn" id="tab-subject-csv" type="button">
+            Private Firm (CSV)
+          </button>
+        </div>
+
+        <div class="tab-panel" id="panel-subject-ticker">
+          <label for="subject-ticker-input" class="field-label">
+            Subject Ticker Symbol
+          </label>
+          <input
+            type="text"
+            id="subject-ticker-input"
+            class="text-input"
+            placeholder="e.g. AAPL"
+            maxlength="5"
+            autocomplete="off"
+            spellcheck="false"
+          />
+        </div>
+
+        <div class="tab-panel hidden" id="panel-subject-csv">
+          <label for="subject-csv-input" class="field-label">
+            Subject Financial Statement (CSV)
+          </label>
+          <input
+            type="file"
+            id="subject-csv-input"
+            accept=".csv"
+          />
+        </div>
+      </div>
+
+      <button type="button" id="submit-btn" class="primary-btn">
+        Run Analysis
+      </button>
+
+    </section>
+
+    <!-- RESULTS SECTION — hidden until analysis completes -->
+    <section id="results-section" class="hidden">
+
+      <h2 class="section-title">Analysis Results</h2>
+
+      <div class="results-grid">
+
+        <div class="result-card" id="card-score">
+          <span class="card-label">Health Score</span>
+          <span class="card-value" id="result-score">—</span>
+          <span class="card-sub" id="result-score-band">—</span>
+        </div>
+
+        <div class="result-card" id="card-distress">
+          <span class="card-label">Distress Flag</span>
+          <span class="card-value" id="result-distress">—</span>
+        </div>
+
+        <div class="result-card" id="card-credit">
+          <span class="card-label">Credit Recommendation</span>
+          <span class="card-value" id="result-credit">—</span>
+        </div>
+
+        <div class="result-card" id="card-status">
+          <span class="card-label">Pipeline Status</span>
+          <span class="card-value" id="result-status">—</span>
+        </div>
+
+      </div>
+
+      <!-- TRENDS TABLE -->
+      <div class="trends-section">
+        <h3 class="subsection-title">Ratio Trends</h3>
+        <table class="trends-table">
+          <thead>
+            <tr>
+              <th>Ratio</th>
+              <th>Direction</th>
+              <th>Slope</th>
+              <th>R²</th>
+              <th>Volatile</th>
+            </tr>
+          </thead>
+          <tbody id="trends-body">
+            <!-- Filled by dashboard.js -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- AI SUMMARY — hidden when provider is none -->
+      <div id="ai-summary-section" class="hidden">
+        <h3 class="subsection-title">AI Summary</h3>
+        <p id="ai-summary-text"></p>
+      </div>
+
+      <button type="button" id="reset-btn" class="secondary-btn">
+        Run Another Analysis
+      </button>
+
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <span>
+      FirmHealth Financials Analyzer &copy; 2026 Shriyans Singh.
+      All Rights Reserved.
+    </span>
+  </footer>
+
+  <!-- Script at bottom of body — DOM fully built before JS executes -->
+  <script src="dashboard.js"></script>
+
+</body>
+</html>
