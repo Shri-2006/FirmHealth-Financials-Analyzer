@@ -326,6 +326,6 @@ kubectl apply -f kubernetes/
 
 ## Built By
 
-**Shriyans Singh** — sophomore at Stony Brook University, BS Business Management + MS Computer Science (AI & Data Science, Honors).
+**Shriyans Singh** — junior at Stony Brook University, BS Business Management + MS Computer Science (AI & Data Science, Honors).
 
 *For licensing inquiries or commercial use, contact the copyright holder directly.*
